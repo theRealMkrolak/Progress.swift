@@ -124,3 +124,17 @@ public struct ProgressString: ProgressElementType {
         return string
     }
 }
+
+
+public struct ProgressStringWithUpdate: ProgressElementType {
+    let update: () -> String
+
+    public init(update: @escaping () -> String) {
+        self.update = update
+    }
+    
+    public func value(_ progressBar: ProgressBar) -> String {
+        return update()
+    }
+    
+}
