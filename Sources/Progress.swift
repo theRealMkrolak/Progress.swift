@@ -60,7 +60,7 @@ public struct ProgressBar {
     public let count: Int
     let configuration: [ProgressElementType]?
 
-    public static var defaultConfiguration: [ProgressElementType] = [ProgressIndex(), ProgressBarLine(), ProgressTimeEstimates()]
+    nonisolated(unsafe) public static var defaultConfiguration: [ProgressElementType] = [ProgressIndex(), ProgressBarLine(), ProgressTimeEstimates()]
 
     var printer: ProgressBarPrinter
     

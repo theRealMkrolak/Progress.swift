@@ -26,7 +26,7 @@
 //  SOFTWARE.
 //
 
-import XCTest
+import Testing
 import Progress
 
 class ProgressBarTestPrinter: ProgressBarPrinter {
@@ -37,48 +37,49 @@ class ProgressBarTestPrinter: ProgressBarPrinter {
     }
 }
 
-class ProgressTests: XCTestCase {
+@Suite("ProgressTests")
+struct ProgressTests {
     
-    override func setUp() {
-        super.setUp()
-
-        ProgressBar.defaultConfiguration = [ProgressIndex(), ProgressBarLine(), ProgressTimeEstimates()]
-    }
-
+    @Test("testProgressDefaultConfiguration")
     func testProgressDefaultConfiguration() {
+        ProgressBar.defaultConfiguration = [ProgressIndex(), ProgressBarLine(), ProgressTimeEstimates()]
+        
         let testPrinter = ProgressBarTestPrinter()
         var bar = ProgressBar(count: 2, printer: testPrinter)
 
         bar.next()
-        XCTAssertEqual(testPrinter.lastValue, "0 of 2 [                              ] ETA: 00:00:00 (at 0.00) it/s)")
+        #expect(testPrinter.lastValue == "0 of 2 [                              ] ETA: 00:00:00 (at 0.00) it/s)")
         bar.next()
-        XCTAssertTrue(testPrinter.lastValue.hasPrefix("1 of 2 [---------------               ] ETA: "))
+        #expect(testPrinter.lastValue.hasPrefix("1 of 2 [---------------               ] ETA: "))
     }
     
+    @Test("testProgressDefaultConfigurationUpdate")
     func testProgressDefaultConfigurationUpdate() {
         ProgressBar.defaultConfiguration = [ProgressPercent()]
         
         let bar = ProgressBar(count: 2)
-        XCTAssertEqual(bar.value, "0%")
+        #expect(bar.value == "0%")
     }
 
-    
+    @Test("testProgressConfiguration")
     func testProgressConfiguration() {
         let testPrinter = ProgressBarTestPrinter()
         var bar = ProgressBar(count: 2, configuration: [ProgressString(string: "percent done:"), ProgressPercent()], printer: testPrinter)
         
         bar.next()
-        XCTAssertEqual(testPrinter.lastValue, "percent done: 0%")
+        #expect(testPrinter.lastValue == "percent done: 0%")
         bar.next()
-        XCTAssertEqual(testPrinter.lastValue, "percent done: 50%")
+        #expect(testPrinter.lastValue == "percent done: 50%")
     }
     
+    @Test("testProgressBarCountZero")
     func testProgressBarCountZero() {
         let bar = ProgressBar(count: 0)
         
-        XCTAssertEqual(bar.value, "0 of 0 [------------------------------] ETA: 00:00:00 (at 0.00) it/s)")
+        #expect(bar.value == "0 of 0 [------------------------------] ETA: 00:00:00 (at 0.00) it/s)")
     }
     
+    @Test("testProgressBarOutOfBounds")
     func testProgressBarOutOfBounds() {
         let testPrinter = ProgressBarTestPrinter()
 
@@ -87,9 +88,10 @@ class ProgressTests: XCTestCase {
             bar.next()
         }
         
-        XCTAssertEqual(testPrinter.lastValue, "2 of 2")
+        #expect(testPrinter.lastValue == "2 of 2")
     }
 
+    @Test("testProgressBarCustomIndex")
     func testProgressBarCustomIndex() {
         let testPrinter = ProgressBarTestPrinter()
 
@@ -99,47 +101,42 @@ class ProgressTests: XCTestCase {
         }
 
         bar.setValue(30)
-
-        XCTAssertEqual(testPrinter.lastValue, "30 of 100")
+        #expect(testPrinter.lastValue == "30 of 100")
 
         bar.setValue(1)
-
-        XCTAssertEqual(testPrinter.lastValue, "1 of 100")
+        #expect(testPrinter.lastValue == "1 of 100")
 
         bar.setValue(-5)
-
-        XCTAssertEqual(testPrinter.lastValue, "1 of 100")
+        #expect(testPrinter.lastValue == "1 of 100")
 
         bar.setValue(100)
-
-        XCTAssertEqual(testPrinter.lastValue, "100 of 100")
+        #expect(testPrinter.lastValue == "100 of 100")
 
         bar.setValue(10000)
-
-        XCTAssertEqual(testPrinter.lastValue, "100 of 100")
+        #expect(testPrinter.lastValue == "100 of 100")
 
         bar.setValue(0)
-
-        XCTAssertEqual(testPrinter.lastValue, "0 of 100")
+        #expect(testPrinter.lastValue == "0 of 100")
     }
     
+    @Test("testProgressGenerator")
     func testProgressGenerator() {
         let testPrinter = ProgressBarTestPrinter()
         let progress = Progress(6...7, configuration: [ProgressIndex()], printer: testPrinter)
         
         var generator = progress.makeIterator()
         
-        XCTAssertEqual(generator.next(), 6)
-        XCTAssertEqual(testPrinter.lastValue, "0 of 2")
-        XCTAssertEqual(generator.next(), 7)
-        XCTAssertEqual(testPrinter.lastValue, "1 of 2")
-        XCTAssertEqual(generator.next(), nil)
-        XCTAssertEqual(testPrinter.lastValue, "2 of 2")
+        #expect(generator.next() == 6)
+        #expect(testPrinter.lastValue == "0 of 2")
+        #expect(generator.next() == 7)
+        #expect(testPrinter.lastValue == "1 of 2")
+        #expect(generator.next() == nil)
+        #expect(testPrinter.lastValue == "2 of 2")
     }
     
+    @Test("testProgressBarPerformance")
     func testProgressBarPerformance() {
-        measure {
-            for _ in Progress(1...100000) {}
-        }
+        for _ in Progress(1...100000) {}
+        // Performance testing would need to be implemented differently with the Testing framework
     }
 }

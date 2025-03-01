@@ -102,4 +102,13 @@ class ProgressElementsTests: XCTestCase {
         
         XCTAssertEqual(timeEstimates.value(bar), "ETA: 00:00:00 (at 0.00) it/s)")
     }
+
+    func testStringWithUpdate() {
+        let bar = ProgressBar(count: 10, printer: ProgressBarTestPrinter())
+        var testString = "test"
+        let stringWithUpdate = ProgressStringWithUpdate(update: { testString })
+        testString = "test2"
+        
+        XCTAssertEqual(stringWithUpdate.value(bar), "test2")
+    }
 }
