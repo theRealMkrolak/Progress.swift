@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Progress.swift}",
+            "name": "Debug ProgressTests",
+            "program": "${workspaceFolder:Progress.swift}/.build/debug/ProgressTests",
+            "preLaunchTask": "swift: Build Debug ProgressTests"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Progress.swift}",
+            "name": "Release ProgressTests",
+            "program": "${workspaceFolder:Progress.swift}/.build/release/ProgressTests",
+            "preLaunchTask": "swift: Build Release ProgressTests"
+        }
+    ]
+}
