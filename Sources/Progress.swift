@@ -151,7 +151,7 @@ public struct ProgressGroupPrinter: ProgressBarPrinter {
         if currentTime - lastPrintedTime > 0.1 || progressBar.index == progressBar.count {
             print(
                 String(repeating: "\u{1B}[1A\u{1B}[K", count: num) + (progressBar.value)
-                    + String(repeating: "\n", count: num))
+                    + String(repeating: "\n", count: num - 1))
             lastPrintedTime = currentTime
         }
     }
