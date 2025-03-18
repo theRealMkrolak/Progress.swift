@@ -26,6 +26,7 @@
 //
 
 // MARK: - ProgressBarDisplayer
+import Foundation
 
 public protocol ProgressBarPrinter {
     mutating func display(_ progressBar: ProgressBar)
@@ -161,14 +162,18 @@ public struct ProgressGroup<G: Sequence> {
     var progresses: [Progress<G>]
 
     public init(sequences: [G], configuration: [ProgressElementType]) {
-        progresses = []
+        self.progresses = []
         for i in 0..<sequences.count {
             var tempConfig = [ProgressElementType]()
             for config in configuration {
                 tempConfig.append(config)
             }
             tempConfig.append(ProgressString(string: "Index \(i)"))
-            progresses.append(Progress(sequences[i], configuration: tempConfig))
+            self.progresses.append(Progress(sequences[i], configuration: tempConfig))
         }
+    }
+
+    func getProgress(index: Int) -> Progress<G> {
+        return progresses[index]
     }
 }
