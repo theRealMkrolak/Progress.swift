@@ -26,33 +26,37 @@
 //  SOFTWARE.
 //
 
-import XCTest
+import Testing
 @testable import Progress
 
-class UtilityTests: XCTestCase {
+@Suite("UtilityTests")
+class UtilityTests {
 
     // MARK: - Substring
+    @Test("testSubstringEndOutOfBounds")
     func testSubstringEndOutOfBounds() {
-        XCTAssertEqual("abc".substringWithRange(2, end: 100), "c")
+        #expect("abc".substringWithRange(2, end: 100) == "c")
     }
     
+    @Test("testSubstringStartOutOfBounds")
     func testSubstringStartOutOfBounds() {
-        XCTAssertEqual("abc".substringWithRange(3, end: 100), "")
-        XCTAssertEqual("abc".substringWithRange(10, end: 100), "")
+        #expect("abc".substringWithRange(3, end: 100) == "")
+        #expect("abc".substringWithRange(10, end: 100) == "")
     }
     
     // MARK: - format double
+    @Test("testFormat")
     func testFormat() {
-        XCTAssertEqual(Double(0.0).format(0), "0")
-        XCTAssertEqual(Double(0.0).format(1), "0.0")
-        XCTAssertEqual(Double(0.0).format(3), "0.000")
+        #expect(Double(0.0).format(0) == "0")
+        #expect(Double(0.0).format(1) == "0.0")
+        #expect(Double(0.0).format(3) == "0.000")
         
-        XCTAssertEqual(Double(0.0).format(0, minimumIntegerPartLength: 1), "0")
-        XCTAssertEqual(Double(0.0).format(0, minimumIntegerPartLength: 2), "00")
-        XCTAssertEqual(Double(0.0).format(3, minimumIntegerPartLength: 3), "000.000")
+        #expect(Double(0.0).format(0, minimumIntegerPartLength: 1) == "0")
+        #expect(Double(0.0).format(0, minimumIntegerPartLength: 2) == "00")
+        #expect(Double(0.0).format(3, minimumIntegerPartLength: 3) == "000.000")
 
-        XCTAssertEqual(Double(100.0).format(0, minimumIntegerPartLength: 1), "100")
-        XCTAssertEqual(Double(100.0).format(0, minimumIntegerPartLength: 2), "100")
-        XCTAssertEqual(Double(100.0).format(1, minimumIntegerPartLength: 4), "0100.0")
+        #expect(Double(100.0).format(0, minimumIntegerPartLength: 1) == "100")
+        #expect(Double(100.0).format(0, minimumIntegerPartLength: 2) == "100")
+        #expect(Double(100.0).format(1, minimumIntegerPartLength: 4) == "0100.0")
     }
 }

@@ -19,6 +19,6 @@ let package = Package(
         .testTarget(
             name: "ProgressTests",
             dependencies: ["Progress"]
-        ),
+        )
     ]
 )

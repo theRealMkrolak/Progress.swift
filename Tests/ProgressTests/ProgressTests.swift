@@ -147,4 +147,14 @@ struct ProgressTests {
         for _ in Progress(1...100000) {}
         // Note: Performance testing would need to be implemented differently with the Testing framework
     }
+    
+    @Test("testProgressGroup")
+    func testProgressGroup() {
+        let n = 10
+        let seqArr : [Range<Int>] = (0..<n).map { _ in 0..<n }
+        let progressGroup = ProgressGroup(sequences: seqArr)
+        for i in 0..<n {
+            for _ in progressGroup.getProgress(index: i) {}
+        }
+    }
 }

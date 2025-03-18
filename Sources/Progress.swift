@@ -161,11 +161,16 @@ public struct ProgressGroupPrinter: ProgressBarPrinter {
 public struct ProgressGroup<G: Sequence> {
     var progresses: [Progress<G>]
 
-    public init(sequences: [G], configuration: [ProgressElementType]) {
+    public init(sequences: [G], configuration: [ProgressElementType] = []) {
         self.progresses = []
+        var configIfEmpty = configuration
+        if configIfEmpty.isEmpty {
+            configIfEmpty = ProgressBar.defaultConfiguration
+        }
+        
         for i in 0..<sequences.count {
             var tempConfig = [ProgressElementType]()
-            for config in configuration {
+            for config in configIfEmpty {
                 tempConfig.append(config)
             }
             tempConfig.append(ProgressString(string: "Index \(i)"))
@@ -173,7 +178,7 @@ public struct ProgressGroup<G: Sequence> {
         }
     }
 
-    func getProgress(index: Int) -> Progress<G> {
+    public func getProgress(index: Int) -> Progress<G> {
         return progresses[index]
     }
 }
