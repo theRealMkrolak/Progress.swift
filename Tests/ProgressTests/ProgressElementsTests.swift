@@ -26,89 +26,108 @@
 //  SOFTWARE.
 //
 
-import XCTest
 import Progress
+import Testing
 
-class ProgressElementsTests: XCTestCase {
+@Suite("ProgressElementsTests")
+class ProgressElementsTests {
 
+    @Test("testPercentElement")
     func testPercentElement() {
         var bar = ProgressBar(count: 10, printer: ProgressBarTestPrinter())
         bar.next()
         let percent = ProgressPercent()
         
-        XCTAssertEqual(percent.value(bar), "10%")
+        #expect(percent.value(bar) == "10%")
     }
     
+    @Test("testPercentElementDecimalPlacesOne")
     func testPercentElementDecimalPlaces() {
         var bar = ProgressBar(count: 10, printer: ProgressBarTestPrinter())
         bar.next()
         bar.next()
         let percent = ProgressPercent(decimalPlaces: 4)
         
-        XCTAssertEqual(percent.value(bar), "20.0000%")
+        #expect(percent.value(bar) == "20.0000%")
     }
     
+    @Test("testPercentElementWithProgressBarCountZero")
     func testPercentElementWithProgressBarCountZero() {
         let bar = ProgressBar(count: 0, printer: ProgressBarTestPrinter())
         let percent = ProgressPercent()
-        XCTAssertEqual(percent.value(bar), "100%")
+        #expect(percent.value(bar) == "100%")
     }
     
+    @Test("testIndexElement")
     func testIndexElement() {
         var bar = ProgressBar(count: 1, printer: ProgressBarTestPrinter())
         let index = ProgressIndex()
         
-        XCTAssertEqual(index.value(bar), "0 of 1")
+        #expect(index.value(bar) == "0 of 1")
         
         bar.next()
-        XCTAssertEqual(index.value(bar), "1 of 1")
+        #expect(index.value(bar) == "1 of 1")
     }
     
+    @Test("testStringElement")
     func testStringElement() {
         let bar = ProgressBar(count: 1, printer: ProgressBarTestPrinter())
         let stringElement = ProgressString(string: "test")
         
-        XCTAssertEqual(stringElement.value(bar), "test")
+        #expect(stringElement.value(bar) == "test")
     }
     
+    @Test("testBarLine")
     func testBarLine() {
         var bar = ProgressBar(count: 3, printer: ProgressBarTestPrinter())
         let barLine = ProgressBarLine()
         
-        XCTAssertEqual(barLine.value(bar), "[                              ]")
+        #expect(barLine.value(bar) == "[                              ]")
         
         bar.next()
         
-        XCTAssertEqual(barLine.value(bar), "[----------                    ]")
+        #expect(barLine.value(bar) == "[----------                    ]")
         
         bar.next()
         bar.next()
         
-        XCTAssertEqual(barLine.value(bar), "[------------------------------]")
+        #expect(barLine.value(bar) == "[------------------------------]")
     }
     
+    @Test("testBarLineLength")
     func testBarLineLength() {
         var bar = ProgressBar(count: 10, printer: ProgressBarTestPrinter())
         let barLine = ProgressBarLine(barLength: 0)
         
         bar.next()
         
-        XCTAssertEqual(barLine.value(bar), "[]")
+        #expect(barLine.value(bar) == "[]")
     }
     
+    @Test("testTimeEstimates")
     func testTimeEstimates() {
         let bar = ProgressBar(count: 10000, printer: ProgressBarTestPrinter())
         let timeEstimates = ProgressTimeEstimates()
         
-        XCTAssertEqual(timeEstimates.value(bar), "ETA: 00:00:00 (at 0.00) it/s)")
+        #expect(timeEstimates.value(bar) == "ETA: 00:00:00 (at 0.00) it/s)")
     }
 
+    @Test("testStringWithUpdate")
     func testStringWithUpdate() {
         let bar = ProgressBar(count: 10, printer: ProgressBarTestPrinter())
         var testString = "test"
         let stringWithUpdate = ProgressStringWithUpdate(update: { testString })
         testString = "test2"
         
-        XCTAssertEqual(stringWithUpdate.value(bar), "test2")
+        #expect(stringWithUpdate.value(bar) == "test2")
+    }
+    
+    @Test("testUpdateingString")
+    func testUpdateingString() {
+        var testString = "test"
+        var stringWithUpdate = ProgressStringWithUpdate(update: { testString })
+        testString = "test2"
+        
+        #expect(stringWithUpdate.value(ProgressBar(count: 1, printer: ProgressBarTestPrinter())) == "test2")
     }
 }
