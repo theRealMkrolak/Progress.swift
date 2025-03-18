@@ -151,7 +151,7 @@ public struct ProgressGroupPrinter: ProgressBarPrinter {
         let currentTime = getTimeOfDay()
         if currentTime - lastPrintedTime > 0.1 || progressBar.index == progressBar.count {
             print(
-                String(repeating: "\u{1B}[1A\u{1B}[K", count: num) + (progressBar.value)
+                "\u{1B}[\(num)A\u{1B}[K" + (progressBar.value)
                     + String(repeating: "\n", count: num - 1))
             lastPrintedTime = currentTime
         }
@@ -174,7 +174,7 @@ public struct ProgressGroup<G: Sequence> {
                 tempConfig.append(config)
             }
             tempConfig.append(ProgressString(string: "Index \(i)"))
-            self.progresses.append(Progress(sequences[i], configuration: tempConfig))
+            self.progresses.append(Progress(sequences[i], configuration: tempConfig, printer: ProgressGroupPrinter(num: sequences.count - (i) )))
         }
     }
 
